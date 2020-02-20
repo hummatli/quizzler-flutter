@@ -35,9 +35,13 @@ class QuizBrain {
 
   bool get isCorrect => _questions[_questionIndex].a;
 
+  bool hasNext() => _questionIndex < _questions.length - 1;
+
   void nextQuestion() {
-    if (_questionIndex < _questions.length - 1) {
+    if (hasNext()) {
       _questionIndex++;
     }
   }
+
+  void reset() => _questionIndex = 0;
 }

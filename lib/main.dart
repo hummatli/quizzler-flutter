@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -31,23 +32,47 @@ class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
   void checkAnswer(bool bookedAnswer) {
-    setState(() {
-      if (bookedAnswer == quizBrain.isCorrect) {
-        print('Right');
-        scoreKeeper.add(Icon(
-          Icons.check,
-          color: Colors.green,
-        ));
-      } else {
-        print('Wrong');
-        scoreKeeper.add(Icon(
-          Icons.close,
-          color: Colors.red,
-        ));
-      }
+    if (quizBrain.hasNext()) {
+      setState(() {
+        if (bookedAnswer == quizBrain.isCorrect) {
+          print('Right');
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          print('Wrong');
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
 
-      quizBrain.nextQuestion();
-    });
+        quizBrain.nextQuestion();
+      });
+    } else {
+      Alert(
+        context: context,
+        title: "RFLUTTER",
+        desc: "Flutter is awesome.",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "OK",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () {
+              setState(() {
+                scoreKeeper.clear();
+                quizBrain.reset();
+              });
+              Navigator.pop(context);
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+    }
   }
 
   @override
